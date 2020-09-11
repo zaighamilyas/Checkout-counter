@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+* {
+  box-sizing: border-box;
+}
+
+/* Create three unequal columns that floats next to each other */
+.column {
+  float: left;
+  padding: 10px;
+  height: 150px; /* Should be removed. Only for demonstration */
+}
+
+.left, .right {
+  width: 25%;
+}
+
+.middle {
+  width: 25%;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+</style>
+</head>
+<body>
+
+<div class="row">
+  <div class="column left" style="background-color:#FFF;height:70px;">
+    <h5>Shopping Cart</h5>
+  </div>
+  <div class="column middle" style="background-color:#FFF;height:70px;">
+  </div>
+  <div class="column right" style="background-color:#FFF;height:70px;">
+    <h6>Price</h6>
+  </div>
+  <div class="column right" style="background-color:#FFF;height:70px;">
+    <h6>Total</h6>    
+  </div>  
+</div>
+
+<div class="row">
+  <div class="column left">
+    <p><img src="images/iphone-image.jpg" class="img"></img></p>
+  </div>
+  <div class="column middle">
+    <h5 id="iphoneXs_name" class="name"></h5>
+    <h6 id="iphoneXs_description" class="description"></h6>
+  </div>
+  <div class="column right">
+    <h6 id="iphoneXs_price" class="price"></h6>
+  </div>
+  <div class="column right">
+    <h6 id="iphoneXs_total" class="total"></h6>    
+  </div>  
+</div>
+
+<div class="row">
+  <div class="column left">
+    <img src="images/iphone-image2.jpg" class="img"></img>
+  </div>
+  <div class="column middle">
+    <h5 id="iphoneXsMax_name" class="name"></h5>
+    <h6 id="iphoneXsMax_description" class="description"></h6>
+  </div>
+  <div class="column right">
+    <h6 id="iphoneXsMax_price" class="price"></h6>
+  </div>
+  <div class="column right">
+    <h6 id="iphoneXsMax_total" class="total"></h6>    
+  </div>  
+</div>
+
+<div class="row">
+  <div class="column left">
+    <img src="images/iphone-image3.jpg" class="img"></img>
+  </div>
+  <div class="column middle">
+    <h5 id="iphoneXsMaxplus_name" class="name"></h5>
+    <h6 id="iphoneXsMaxplus_description" class="description"></h6>
+  </div>
+  <div class="column right">
+    <h6 id="iphoneXsMaxplus_price" class="price"></h6>
+  </div>
+  <div class="column right">
+    <h6 id="iphoneXsMaxplus_total" class="total"></h6>    
+  </div>  
+</div>
+
+<div class="row">
+  <div class="column left">
+  	<span style="inline">
+    <input type="text" id="txtCoupon"></input>
+    <button onclick="couponClick()" id="ApplyCouponButton" >Apply coupon</button>
+     </span>
+  </div>
+  <div class="column middle">
+  </div>
+  <div class="column right">
+    <h5>Subtotal</h5>
+    <h6>Shipping</h6>
+    <h6  id="discountPara">Discount</h6>
+    <h6>Grand Total</h6>
+    
+  </div>
+  <div class="column right">
+    <h5 id="subtotal" class="subtotal"></h5>
+    <h6 id="shipping" class="shipping"></h6>
+    <h6 id="discountElement" class="shipping"></h6>
+    <h6 id="grandTotal" class="grandTotal"></h6>
+    <br />
+    <button>Checkout</button>
+    
+  </div>  
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
+
+
