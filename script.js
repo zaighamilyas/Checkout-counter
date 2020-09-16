@@ -72,6 +72,24 @@ function displayParams() {
 
 var myVar, y;
 //var x = document.getElementById("txtCoupon").value;
+const params = new URLSearchParams(window.location.search);
+  var showPromoButtonVar = params.get("applyPromoCode");
+   if (showPromoButtonVar == "true")  {
+    document.getElementById("txtCoupon").style.display = "none";
+    document.getElementById("ApplyCouponButton").style.display = "none"; 
+    
+   }
+   else if (showPromoButtonVar == "false")  {
+    document.getElementById("showPromoId").style.display = "none";
+
+   }
+
+   
+   function showPromoButton() {
+    document.getElementById("txtCoupon").style.display = "block";
+    document.getElementById("ApplyCouponButton").style.display = "block"; 
+  
+   }
 function couponClick() {
   const params1 = new URLSearchParams(window.location.search);
   var str1 = params1.get("ajaxDelayMs");
@@ -155,6 +173,8 @@ function actualFunction(x) {
   }
 }
 
+
+
 function changeValue() {
   var grandTotalDiscounted = sum - ((getObject.percentage * 0.01) * sum);
   document.getElementById("grandTotal").innerHTML = grandTotalDiscounted;
@@ -229,6 +249,7 @@ function createDiscountDiv() {
 
 }
 
+
 function loadUser() {
 
   var user = JSON.parse(localStorage.getItem('user'));
@@ -245,6 +266,7 @@ function loadUser() {
 }
 
 function secondCall() {
+  
   var x = document.getElementById("txtCoupon").value;
   var sum = document.getElementById("subtotal").innerHTML.replace("$", '');
   const params = new URLSearchParams(window.location.search);
@@ -269,4 +291,4 @@ function secondCall() {
 //alert(grandTotal.innerHTML);
 loadUser();
 
-    // postRefresh();
+
