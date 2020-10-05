@@ -2,7 +2,7 @@
 document.addEventListener('DOMContentLoaded', (event) => {
   displayParams();
   checkout();
-  createDiscountDiv();
+  //createDiscountDiv();
 });
 function checkout() {
   const storeConfig = {
@@ -79,7 +79,7 @@ const params = new URLSearchParams(window.location.search);
     document.getElementById("ApplyCouponButton").style.display = "none"; 
     
    }
-   else if (showPromoButtonVar == "false")  {
+   else if (showPromoButtonVar == "false")  {   
     document.getElementById("showPromoId").style.display = "none";
 
    }
@@ -100,7 +100,7 @@ function couponClick() {
 }
 
 
-function actualFunction(x) {
+function actualFunction(y) {
 
   const params = new URLSearchParams(window.location.search);//(Params becomes an array of all the parameters)
   //console.log(params);
@@ -138,38 +138,53 @@ function actualFunction(x) {
 
   }
 
+//alert(y.length);
+  const getObject = couponsList.find(couponsList => couponsList.coupon === y[y.length-1]);
 
-  const getObject = couponsList.find(couponsList => couponsList.coupon === x);
-  //alert(x);
-
-  //var  sum = document.getElementById("subtotal").innerHTML.replace("$", '');
-  //alert(sum);
+ console.log(getObject);
   var sum = JSON.parse(localStorage.getItem('sum'));
   var refresh = params.get("pageRefreshOnCouponApply");
 
 
   if (getObject) {
     alert("Coupon is valid and you will save " + ((getObject.percentage * 0.01) * sum) + " dollars ");
-    createAdditionalDivs();
-    window.localStorage.setItem('coupon', JSON.stringify(x));
+   window.localStorage.setItem('coupon', JSON.stringify(y));
+   var i;
+  for (i = 0; i < y.length ; i++) {
+    createAdditionalDivs(i);
+  }
+   // alert(coupon);
     const params = new URLSearchParams(window.location.search);
     var inputBoxShow = params.get("showCouponInputWhenCouponIsApplied");
     if (inputBoxShow == "false") {
       document.getElementById("txtCoupon").style.display = "none";
       document.getElementById("ApplyCouponButton").style.display = "none";
     }
-    //changeValue();                
+    else {
+      document.getElementById("txtCoupon").style.display = "block";
+      document.getElementById("ApplyCouponButton").style.display = "block";
+
+    }
+    const paramsDiff = new URLSearchParams(window.location.search);
+    var showMultipleCoupons = paramsDiff.get("multipleCouponSupport");
+    if (showMultipleCoupons == "true")   { 
+      document.getElementById("txtCoupon").style.display = "block";
+      document.getElementById("ApplyCouponButton").style.display = "block";
+     }
+                   
 
     document.getElementById("discountElement").innerHTML = ((getObject.percentage * 0.01) * sum);
     var grandTotalDiscounted = sum - ((getObject.percentage * 0.01) * sum);
     document.getElementById("grandTotal").innerHTML = grandTotalDiscounted;
-    // alert(grandTotal.innerHTML);
+    
   }
   else {
     alert("Coupon is invalid.Try any other coupon");
     document.getElementById("discountElement").style.display = "none";
     document.getElementById("discountPara").style.display = "none";
-    //document.getElementById("discount").innerHTML = " -- ";       
+    window.localStorage.removeItem('coupon');   
+    window.localStorage.removeItem('user');   
+    y.pop();
   }
 }
 
@@ -183,46 +198,59 @@ function changeValue() {
 
 function getCoupon() {
   var coupon = JSON.parse(localStorage.getItem('coupon'));
+  
   return coupon;
 
 }
 
 
-function createAdditionalDivs() {
+function createAdditionalDivs(i) {
   var item = "user";
-
-  if (getCoupon()) {
-    item = "coupon";
+ 
+  if (getCoupon() ) {
+    item = "coupon";         
   }
-
+//alert(coupon);
   var div = document.createElement("div");
 
   div.style.width = "100%";
   div.style.height = "100%";
 
   var newlabel = document.createElement("Label");
-  newlabel.id = "lblDisplay";
-
-  newlabel.innerHTML = "Coupon applied: " + localStorage.getItem(item);
+  //newlabel.id = "lblDisplay_" + i;
+ let retrieving = JSON.parse(localStorage.getItem(item));
+//alert(retrieving);
+ //alert(y.length);
+ //alert(i);
+ //alert(retrieving[i]);
+  newlabel.innerHTML = "Coupon applied: " + retrieving[i] ;
 
   div.appendChild(newlabel);
 
-  div.id = "removeBtnDiv";
+  div.id = "removeBtnDiv_" + i;
 
   document.getElementById("txtCoupon").parentElement.appendChild(div);
 
   const params = new URLSearchParams(window.location.search);
   var removePermission = params.get("codesCanBeRemoved");
-  if (removePermission == "true") {
+  if (removePermission == "true") {          
 
     var btn = document.createElement("BUTTON");
     btn.innerHTML = "Remove";
-    btn.id = "btnRemove";
+    //btn.id = "btnRemove";
 
     btn.addEventListener("click", function () {
+      //alert(i);
+      //this.closest("span").remove();
+      document.getElementById("removeBtnDiv_" + i).remove();
+      var couponArray = JSON.parse(localStorage.getItem('coupon'));
+     couponArray.splice(i,1);
+     //alert(couponArray);
+      //alert(couponArray);
 
-      document.getElementById("removeBtnDiv").remove();
-      localStorage.removeItem('coupon');
+      localStorage.setItem('coupon',JSON.stringify(couponArray));
+      //localStorage.setItem('user',JSON.stringify(couponArray));
+      //localStorage.removeItem('coupon');
       localStorage.removeItem('user');
       const params = new URLSearchParams(window.location.search);
       var refreshOnRemove = params.get("pageRefreshOnCouponRemove");
@@ -236,59 +264,95 @@ function createAdditionalDivs() {
   }
 
 }
-function createDiscountDiv() {
-  var div = document.createElement("div");
-  var discountLabel = document.createElement("Label");
-  discountLabel.id = "lblDiscount";
+//function createDiscountDiv() {
+  //var div = document.createElement("div");
+  //var discountLabel = document.createElement("Label");
+  //discountLabel.id = "lblDiscount";
 
-  discountLabel.innerHTML = "Coupon applied: " + localStorage.getItem(item);
-  div.appendChild(discountLabel);
-  document.getElementById("shipping").insertAdjacentElement(div);//parentElement.appendChild(div);
+  //discountLabel.innerHTML = "Coupon applied: " + localStorage.getItem(item);
+  //div.appendChild(discountLabel);
+  //document.getElementById("shipping").insertAdjacentElement(div);//parentElement.appendChild(div);
   //document.getElementById("discountLabel").insertBefore(document.getElementById("grandTotal"));
 
 
-}
+//}
 
 
 function loadUser() {
 
   var user = JSON.parse(localStorage.getItem('user'));
+  //console.log(user);
   var cpn = getCoupon();
   //document.getElementById("grandTotal").innerHTML = sum; 
+//alert(user);
+//alert(cpn);
+  
 
-
-  if (cpn) {
-    createAdditionalDivs();
-  }
-  else if (user) {
-    actualFunction(user);
-  }
+if (user) {
+    
+  actualFunction(user);
 }
 
-function secondCall() {
+else if (cpn) {
+    for (i = 0; i < cpn.length ; i++) { 
+    createAdditionalDivs(i);
+    //alert("here");
+    }
+  }
   
+  
+}
+
+function secondCall() {   
   var x = document.getElementById("txtCoupon").value;
+  var forCheckingValue = localStorage.getItem("user");
+
+  if (forCheckingValue  && forCheckingValue != "undefined" ) {  
+   //alert(forCheckingValue); 
+  var user = JSON.parse(forCheckingValue);
+  var first = user.find(myFunction);
+
+  //alert(first);
+  if (x != first) {
+    
+  user.push(x);
+  localStorage.setItem("user", JSON.stringify(user));
+    }
+  }
+
+  else  {
+    
+    var couponsApplyArray = []; 
+    couponsApplyArray.push(x); 
+    localStorage.setItem("user", JSON.stringify(couponsApplyArray));
+  }
+
+  function myFunction(value, index, array) {
+    return value == x;
+  }
+
+  
+  //console.log(couponsApplyArray);
   var sum = document.getElementById("subtotal").innerHTML.replace("$", '');
   const params = new URLSearchParams(window.location.search);
   var refresh = params.get("pageRefreshOnCouponApply");
-
-  //alert(refresh);
+                             
+  
   if (refresh == "true") {
-    // alert(x);
-    window.localStorage.setItem('user', JSON.stringify(x));
+    //localStorage.setItem("user", JSON.stringify(couponsApplyArray));
+    //window.localStorage.setItem('user', JSON.stringify(x));
 
     window.localStorage.setItem('sum', JSON.stringify(sum));
     window.location.reload();
-
+                   
   }
   else {
 
-    actualFunction(x);
+    actualFunction(user);
 
   }
 
 }
-//alert(grandTotal.innerHTML);
+
+
 loadUser();
-
-
